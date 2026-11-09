@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#ff6fae">
+<title>Operation Hadisha — Birthday Surprise</title>
+<style>
+:root{--pink:#ff6fae;--purple:#8b70e8;--ink:#342b49;--cream:#fff9f4}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:ui-rounded,"Trebuchet MS",system-ui,sans-serif;color:var(--ink);background:linear-gradient(145deg,#fff0f6,#f1edff 55%,#fff8e8);overflow-x:hidden}
+main{width:min(760px,92vw);margin:0 auto;padding:28px 0 56px;position:relative;z-index:2}
+.card{background:#ffffffd9;border:1px solid #fff;box-shadow:0 18px 60px #7e5a9c20;border-radius:30px;padding:clamp(24px,6vw,52px);text-align:center;backdrop-filter:blur(8px);min-height:480px;display:flex;flex-direction:column;justify-content:center;align-items:center}
+.tag{font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:#9779c5;font-weight:800}
+h1{font-size:clamp(2.5rem,9vw,5rem);line-height:1;margin:18px 0 14px;color:#ed579c}
+h2{font-size:clamp(1.8rem,6vw,3rem);margin:12px 0;color:#795bd0}
+p{font-size:clamp(1rem,3vw,1.18rem);line-height:1.7;max-width:540px}
+.emoji{font-size:4rem;display:block;animation:bob 2s ease-in-out infinite}
+button{border:0;border-radius:999px;padding:15px 25px;font-size:1rem;font-weight:800;cursor:pointer;color:white;background:linear-gradient(100deg,#ff6fae,#9474e8);box-shadow:0 9px 22px #b77acb44;margin:10px;transition:transform .18s}
+button:hover{transform:translateY(-3px) scale(1.02)}
+button.secondary{background:#fff;color:#795bd0;border:2px solid #e8ddff;box-shadow:none}
+.buttons{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:18px}
+.hidden{display:none!important}
+.progress{height:7px;background:#eee6f8;border-radius:99px;overflow:hidden;margin:0 auto 20px;width:min(420px,80vw)}
+.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,#ff80b5,#9474e8);transition:width .4s}
+.note{background:#fff3f8;border-radius:20px;padding:18px 22px;margin:12px 0;max-width:520px}
+footer{text-align:center;color:#907fa5;font-size:.82rem;margin-top:18px}
+#party{position:fixed;inset:0;pointer-events:none;z-index:5;overflow:hidden}
+.confetti{position:absolute;top:-20px;width:9px;height:14px;border-radius:3px;animation:fall linear forwards}
+.firework{position:absolute;font-size:clamp(25px,6vw,55px);animation:pop 1.3s ease-out forwards}
+.balloon{position:fixed;bottom:-100px;font-size:42px;animation:rise 8s linear infinite;z-index:1;opacity:.8}
+@keyframes bob{50%{transform:translateY(-10px) rotate(4deg)}}
+@keyframes fall{to{transform:translateY(110vh) rotate(760deg)}}
+@keyframes pop{0%{transform:scale(.1);opacity:0}35%{transform:scale(1.25);opacity:1}100%{transform:scale(.8);opacity:0}}
+@keyframes rise{to{transform:translateY(-120vh) rotate(12deg)}}
+@media(max-width:480px){.card{min-height:520px;padding:26px 18px}button{width:100%;max-width:280px}}
+</style>
+</head>
+<body>
+<div id="party"></div>
+<main>
+  <div class="progress"><span id="bar"></span></div>
+  <section class="card" id="step0">
+    <div class="tag">A top-secret birthday mission</div>
+    <span class="emoji">🕵️‍♀️🎁</span>
+    <h1>Hey, Hadisha!</h1>
+    <p>Someone has prepared a little something for you. Before you continue, please confirm that you are ready for a very important mission.</p>
+    <p><strong>Warning:</strong> excessive smiling may occur. 😂</p>
+    <div class="buttons"><button onclick="next(1)">I'm ready! Let's go ✨</button></div>
+  </section>
+
+  <section class="card hidden" id="step1">
+    <div class="tag">Mission briefing · 01</div>
+    <span class="emoji">📜</span>
+    <h2>Three tiny rules</h2>
+    <div class="note">1. Keep that beautiful smile ready. 😊</div>
+    <div class="note">2. No skipping ahead — the boss is watching. 👀</div>
+    <div class="note">3. Your only job today is to enjoy yourself. Deal? 😂</div>
+    <div class="buttons"><button onclick="next(2)">Deal! Next ➜</button></div>
+  </section>
+
+  <section class="card hidden" id="step2">
+    <div class="tag">A little appreciation · 02</div>
+    <span class="emoji">💛🌷</span>
+    <h2>A message for you</h2>
+    <p>Hadisha, I hope you know how special you are as a friend. Thank you for the laughs, the good vibes, and all the little moments that make friendship fun.</p>
+    <p>May this new chapter bring you beautiful opportunities, good health, genuine happiness, and plenty of reasons to laugh. Keep being your wonderfully awesome self!</p>
+    <div class="buttons"><button onclick="next(3)">Awww… continue 🥹</button></div>
+  </section>
+
+  <section class="card hidden" id="step3">
+    <div class="tag">Final security check · 03</div>
+    <span class="emoji">🎂</span>
+    <h2>Wait… is it your birthday?</h2>
+    <p>We have cake, music, balloons and absolutely no plans to behave normally. Are you ready for the grand finale?</p>
+    <div class="buttons">
+      <button onclick="celebrate()">YES! Bring it on! 🎉</button>
+      <button class="secondary" onclick="celebrate()">I was born ready 😂</button>
+    </div>
+  </section>
+
+  <section class="card hidden" id="final">
+    <div class="tag">Mission completed · Birthday mode activated</div>
+    <span class="emoji">🎉🎂🥳</span>
+    <h1>Happy Birthday,<br>Hadisha!</h1>
+    <p>May your days be bright, your dreams come closer, your laughter never run out, and your cake be bigger than your problems. 😂❤️</p>
+    <p><strong>You deserve all the good things life has to offer. Have the best birthday ever!</strong></p>
+    <div class="note">🎵 Your birthday tune is ready — tap below to play it!</div>
+    <div class="buttons">
+      <button id="musicBtn" onclick="playTune()">▶ Play birthday tune</button>
+      <button class="secondary" onclick="partyTime()">More fireworks! 🎆</button>
+    </div>
+    <footer>Made with friendship, good vibes & a little mischief. 💛</footer>
+  </section>
+  <footer>OPERATION HADISHA · CONFIDENTIAL FRIENDSHIP BUSINESS 😂</footer>
+</main>
+<script>
+let current=0, audioCtx=null;
+function next(n){
+ document.getElementById('step'+current).classList.add('hidden');
+ current=n; document.getElementById('step'+n).classList.remove('hidden');
+ document.getElementById('bar').style.width=(n/4*100)+'%';
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+function confettiBurst(count=130){
+ const root=document.getElementById('party');
+ const colors=['#ff6fae','#9474e8','#ffd166','#72d6c9','#ff9671','#8ec5ff'];
+ for(let i=0;i<count;i++){
+  const e=document.createElement('i');e.className='confetti';
+  e.style.left=Math.random()*100+'vw';e.style.background=colors[i%colors.length];
+  e.style.animationDuration=(3+Math.random()*4)+'s';
+  e.style.animationDelay=(Math.random()*.8)+'s';
+  e.style.transform='rotate('+Math.random()*360+'deg)';
+  root.appendChild(e);setTimeout(()=>e.remove(),8500);
+ }
+}
+function fireworks(){
+ const root=document.getElementById('party');
+ const symbols=['🎆','✨','🎇','💖','🌟'];
+ for(let i=0;i<18;i++){
+  const e=document.createElement('span');e.className='firework';e.textContent=symbols[i%symbols.length];
+  e.style.left=(5+Math.random()*88)+'vw';e.style.top=(8+Math.random()*70)+'vh';
+  e.style.animationDelay=(Math.random()*.7)+'s';root.appendChild(e);setTimeout(()=>e.remove(),2200);
+ }
+}
+function balloons(){
+ const root=document.getElementById('party');
+ ['🎈','🎈','💜','🎈','💗'].forEach((s,i)=>{
+  const e=document.createElement('span');e.className='balloon';e.textContent=s;
+  e.style.left=(8+i*19)+'vw';e.style.animationDelay=(i*.7)+'s';root.appendChild(e);
+  setTimeout(()=>e.remove(),9000);
+ });
+}
+function celebrate(){
+ document.getElementById('step3').classList.add('hidden');
+ document.getElementById('final').classList.remove('hidden');
+ document.getElementById('bar').style.width='100%';
+ partyTime();balloons();window.scrollTo({top:0,behavior:'smooth'});
+}
+function partyTime(){confettiBurst();fireworks();balloons();}
+function playTune(){
+ const btn=document.getElementById('musicBtn');
+ const AudioContext=window.AudioContext||window.webkitAudioContext;
+ if(!AudioContext){btn.textContent='Audio is not supported on this browser';return;}
+ if(!audioCtx)audioCtx=new AudioContext();
+ audioCtx.resume();
+ // A bright, simple instrumental birthday melody (user-initiated playback).
+ const notes=[392,392,440,392,523,494,392,392,440,392,587,523,392,392,784,659,523,494,440,698,698,659,523,587,523];
+ const durations=[.28,.28,.55,.55,.55,1.05,.28,.28,.55,.55,.55,1.05,.28,.28,.55,.55,.55,.55,1.05,.28,.28,.55,.55,.55,1.1];
+ let t=audioCtx.currentTime+.08;
+ notes.forEach((f,i)=>{
+  const osc=audioCtx.createOscillator(),gain=audioCtx.createGain();
+  osc.type='sine';osc.frequency.value=f;gain.gain.setValueAtTime(.0001,t);
+  gain.gain.exponentialRampToValueAtTime(.13,t+.025);
+  gain.gain.exponentialRampToValueAtTime(.0001,t+durations[i]*.9);
+  osc.connect(gain);gain.connect(audioCtx.destination);osc.start(t);osc.stop(t+durations[i]);
+  t+=durations[i]+.06;
+ });
+ btn.textContent='🎵 Birthday tune playing!';
+ setTimeout(()=>btn.textContent='▶ Play birthday tune again',notes.reduce((a,b)=>a+b,0)*.3*1000);
+}
+</script>
+</body>
+</html>
